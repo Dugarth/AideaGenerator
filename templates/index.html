@@ -1,43 +1,45 @@
-<!--<!DOCTYPE html>
+<!--<!doctype html>
 <html>
   <head>
-    <title>Video idea</title>
+    <title>Content Idea Generator</title>
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
   </head>
   <body>
-    <h1>Video idea</h1>
-    <form method="post">
-      <label for="prompt">Write your idea:</label><br>
-      <input type="text" id="prompt" name="prompt"><br>
-      <br>
-      <input type="submit" value="Submit">
-    </form>
-    {% if prompt %}
-      <h2>Prompt:</h2>
-      <p>{{ prompt }}</p>
-      <h2>Response:</h2>
-      <p>{{ response }}</p>
+    <h1>Content Idea Generator</h1>
+    {% if error %}
+      <p class="error">{{ error }}</p>
     {% endif %}
-
-    <div class="response-part">
-        <h3>Response Part 1:</h3>
-        <p>{{ part1 }}</p>
-    </div>
-    <div class="response-part">
-        <h3>Response Part 2:</h3>
-        <p>{{ part2 }}</p>
-    </div>
-    <div class="response-part">
-        <h3>Response Part 3:</h3>
-        <p>{{ part3 }}</p>
-    </div>
-    <div class="response-part">
-        <h3>Response Part 4:</h3>
-        <p>{{ part4 }}</p>
-    </div>
-    <div class="response-part">
-        <h3>Response Part 5:</h3>
-        <p>{{ part5 }}</p>
-    </div>
+    <form method="post" action="{{ url_for('generate') }}">
+      <label for="prompt">Enter your prompt:</label><br>
+      <input type="text" id="prompt" name="prompt" value="{{ prompt }}"><br>
+      <button type="submit">Generate Ideas</button>
+    </form>
+    {% if part1 %}
+      <h2>Ideas:</h2>
+      <ol>
+        <li>{{ part1 }}</li>
+        <li>{{ part2 }}</li>
+        <li>{{ part3 }}</li>
+        <li>{{ part4 }}</li>
+        <li>{{ part5 }}</li>
+      </ol>
+      {% if solutions %}
+        <h2>Solutions:</h2>
+        <ul>
+          {% for key, value in solutions.items() %}
+            <li><strong>{{ key }}</strong> {{ value }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <form method="post" action="{{ url_for('download') }}">
+        <input type="hidden" name="prompt" value="{{ prompt }}">
+        <button type="submit">Download Ideas as .txt</button>
+      </form>
+    {% endif %}
   </body>
 </html>
 <!doctype html>
@@ -100,24 +102,47 @@
     {% if part1 %}
       <h2>Ideas:</h2>
       <ol>
-        <li>{{ part1 }}</li>
-        <li>{{ part2 }}</li>
-        <li>{{ part3 }}</li>
-        <li>{{ part4 }}</li>
-        <li>{{ part5 }}</li>
+        <li>
+          {{ part1 }} 
+          <form method="post" action="{{ url_for('download_idea') }}">
+            <input type="hidden" name="prompt" value="{{ prompt }}">
+            <input type="hidden" name="idea" value="{{ part1 }}">
+            <button type="submit">Download as .txt</button>
+          </form>
+        </li>
+        <li>
+          {{ part2 }} 
+          <form method="post" action="{{ url_for('download_idea') }}">
+            <input type="hidden" name="prompt" value="{{ prompt }}">
+            <input type="hidden" name="idea" value="{{ part2 }}">
+            <button type="submit">Download as .txt</button>
+          </form>
+        </li>
+        <li>
+          {{ part3 }} 
+          <form method="post" action="{{ url_for('download_idea') }}">
+            <input type="hidden" name="prompt" value="{{ prompt }}">
+            <input type="hidden" name="idea" value="{{ part3 }}">
+            <button type="submit">Download as .txt</button>
+          </form>
+        </li>
+        <li>
+          {{ part4 }} 
+          <form method="post" action="{{ url_for('download_idea') }}">
+            <input type="hidden" name="prompt" value="{{ prompt }}">
+            <input type="hidden" name="idea" value="{{ part4 }}">
+            <button type="submit">Download as .txt</button>
+          </form>
+        </li>
+        <li>
+          {{ part5 }} 
+          <form method="post" action="{{ url_for('download_idea') }}">
+            <input type="hidden" name="prompt" value="{{ prompt }}">
+            <input type="hidden" name="idea" value="{{ part5 }}">
+            <button type="submit">Download as .txt</button>
+          </form>
+        </li>
       </ol>
-      {% if solutions %}
-        <h2>Solutions:</h2>
-        <ul>
-          {% for key, value in solutions.items() %}
-            <li><strong>{{ key }}</strong> {{ value }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-      <form method="post" action="{{ url_for('download') }}">
-        <input type="hidden" name="prompt" value="{{ prompt }}">
-        <button type="submit">Download Ideas as .txt</button>
-      </form>
     {% endif %}
   </body>
 </html>

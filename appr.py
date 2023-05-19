@@ -55,10 +55,7 @@ def generate():
     response_parts = [part.strip() for part in response.split('\n') if part.strip()]
     if len(response_parts) < 5 or len(response_parts) > 7:
         return render_template('index.html', prompt=prompt, error="Response was not in expected format")
-    if len(response_parts) == 5:
-        part1, part2, part3, part4, part5 = response_parts
-    else:
-        part1, part2, part3, part4, part5 = response_parts[:5]
+    part1, part2, part3, part4, part5 = response_parts[:5]
     solutions = extract_solutions(response)
     return render_template('index.html', prompt=prompt, 
                            part1=part1, part2=part2, part3=part3, part4=part4, part5=part5,
@@ -76,20 +73,6 @@ def download():
     response.headers.set('Content-Disposition', 'attachment', filename=filename)
     response.headers.set('Content-Type', 'text/plain')
     return response
-
-@app.route('/download_idea', methods=['POST'])
-def download_idea():
-    prompt = request.form['prompt']
-    idea = request.form['idea']
-    filename = f"{prompt} - {idea}.txt"
-    file_path = os.path.join(app.root_path, 'downloads', filename)
-    with open(file_path, 'w') as f:
-        f.write(idea)
-    response = make_response(open(file_path).read())
-    response.headers.set('Content-Disposition', 'attachment', filename=filename)
-    response.headers.set('Content-Type', 'text/plain')
-    return response
-
 # Create the downloads folder if it does not exist
 if not os.path.exists('downloads'):
     os.makedirs('downloads')
